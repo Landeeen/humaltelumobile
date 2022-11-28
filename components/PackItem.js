@@ -22,7 +22,7 @@ container:
     {
     width: width,
     alignItems: 'center',
-    marginBottom: 5
+    marginBottom: 5,
     },
 card:
     {

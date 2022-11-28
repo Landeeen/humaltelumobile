@@ -25,15 +25,15 @@ const packs = [
     maker: 'Samu'
     },
     {
-    name: 'Normaali Peli',
+    name: 'Super Peli',
     maker: 'Samu'
     },
     {
-    name: 'Normaali Peli',
+    name: 'Hauska Peli',
     maker: 'Samu'
     },
     {
-    name: 'Normaali Peli',
+    name: 'Vain Peli',
     maker: 'Samu'
     },
 ]
@@ -41,6 +41,10 @@ const packs = [
     return (
         <View style={styles.container}>
             <View style={styles.top}>
+                <Pressable style={({ pressed }) => [styles.backButton, pressed ? {opacity: 0.3} : {},]} onPress={() => navigation.goBack()}>
+                    <Ionicons name="caret-back" size={15} color="black"/>
+                    <Text>Takaisin</Text>
+                </Pressable>
                 <TextInput
                 value={player}
                 style={styles.input}
@@ -57,12 +61,13 @@ const packs = [
                 </View>
                 <Ionicons name="beer-outline" size={200} style={styles.background}/>
             </View>
-            <Pressable style={({ pressed }) => [styles.startButton, pressed ? {opacity: 0.3} : {},]} onPress={() => navigation.navigate('Play')}>
+            <Pressable style={({ pressed }) => [styles.startButton, pressed ? {opacity: 0.3} : {},]} onPress={() => navigation.navigate('Play', {playerList: playerList})}>
                 <Ionicons name="play-circle" size={40} color="black"/>
                 <Text style={styles.startText}>Aloita Peli</Text>
             </Pressable>
             <View style={styles.card}>
                 <FlatList
+                keyExtractor={item => item.name}
                 horizontal
                 showsHorizontalScrollIndicator={false}
                 pagingEnabled={true}
@@ -76,11 +81,6 @@ const packs = [
 
     );
   }
-  
-{/* <Button
-            title="Go to Home"
-            onPress={() => navigation.navigate('Home')}
-            /> */}
 
 const styles = StyleSheet.create({
     container:
@@ -148,6 +148,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
+        
         },
     startText:
         {
@@ -175,6 +176,14 @@ const styles = StyleSheet.create({
         {
             position: 'absolute',
             bottom: 50,
+        },
+    backButton:
+        {
+            position: 'absolute',
+            top: 45,
+            left: 10,
+            fontSize: 15,
+            flexDirection: 'row'
         },
 
   })
