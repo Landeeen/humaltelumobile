@@ -18,7 +18,7 @@ export default function Home({navigation}) {
             <Pressable style={({ pressed }) => [styles.card, styles.small,  pressed ? {opacity: 0.6} : {},]} onPress={() => navigation.navigate('Profile')}>
                 <Ionicons name="globe-outline" size={65} color="black"/>
             </Pressable>
-            <Pressable style={({ pressed }) => [styles.card,  pressed ? {opacity: 0.6} : {},]} onPress={() => navigation.navigate('Profile')}>
+            <Pressable style={({ pressed }) => [styles.card,  pressed ? {opacity: 0.6} : {},]} onPress={() => navigation.navigate('OwnCollection')}>
                 <Text style={styles.title}>Omat</Text>
             </Pressable>
          </View>

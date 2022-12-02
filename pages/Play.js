@@ -1,20 +1,47 @@
 import * as React from 'react';
 import { View, Text, Button, StyleSheet, Pressable } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { API, graphqlOperation } from 'aws-amplify'
+import { listPacks } from '../src/graphql/queries/'
+
 
 export default function Play({navigation, route}) {
 
+  const [tasks, setTasks] = React.useState([])
+
+
+React.useEffect( () => {
+
+const fetchPacks = async () => {
+  try{
+
+    const packsResult = await API.graphql(
+      graphqlOperation(listPacks)
+    )
+    setTasks(packsResult.data.listPacks.items[0].tasks)
+    // console.log(packsResult.data.listPacks.items[1].tasks);
+    
+  } catch (e) {
+    console.log(e);
+  }
+}
+fetchPacks()
+}, [])
+
+const player1 = 'Samu'
+
 const {playerList} = route.params
 
-const categoryButtons = ['yksilö', 'pari', 'ryhmä', 'sattuma']
-const [tasks, setTasks] = React.useState(['juo shotti', 'heitä voltti', 'syö kiviä', 'lennä kuuhun'])
 const [task, setTask] = React.useState(null)
 
 const nextTask = () => {
+  
   const newTask = tasks[Math.floor(Math.random() * tasks.length)]
   setTask(newTask)
   const newTasks = tasks.filter((e) => e !== newTask)
+  
   setTasks(newTasks)
+ 
   
   
 }
@@ -25,17 +52,23 @@ const nextTask = () => {
             <Pressable style={({ pressed }) => [styles.menu, pressed ? {opacity: 0.3} : {},]} onPress={() => navigation.navigate('Home')}>
               <Ionicons name="menu" size={25} color="black"/>
             </Pressable>
-           {categoryButtons.map((category, index) => {
-            return(
+           
               <Pressable style={({ pressed }) => [styles.category, pressed ? {opacity: 0.3} : {},]} onPress={() => nextTask()}>
-                <Text>{category}</Text>
+                <Text>Seuraava tehtävä</Text>
               </Pressable>
-            )
-           })}
+            
           </View>
           <View style={styles.card}>
             <Text style={styles.task}>{task}</Text>
-            
+            {task === undefined && tasks.length < 1 ?
+            <View>
+              <Text style={styles.task}>PELI PÄÄTTYI</Text>
+              <Pressable style={({ pressed }) => [styles.menu, pressed ? {opacity: 0.3} : {},]} onPress={() => navigation.navigate('Home')}>
+                <Ionicons name="home-outline" size={25} color="black"/>
+                <Text >Takaisin kotivalikkoon</Text>
+              </Pressable>
+            </View>
+              : null}
           </View>
           
         </View>

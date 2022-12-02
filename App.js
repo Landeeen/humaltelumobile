@@ -5,9 +5,11 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import Home from './pages/Home';
-import Profile from './pages/Profile'
-import Play from './pages/Play'
-import ConfigurePlay from './pages/ConfigurePlay'
+import Profile from './pages/Profile';
+import Play from './pages/Play';
+import ConfigurePlay from './pages/ConfigurePlay';
+import OwnCollection from './pages/OwnCollection';
+import PackCreator from './pages/PackCreator';
 
 import { Amplify } from 'aws-amplify'
 import awsconfig from './src/aws-exports'
@@ -15,6 +17,7 @@ import { Authenticator, ThemeProvider } from '@aws-amplify/ui-react-native';
 
 import { I18n } from 'aws-amplify';
 import { translations } from '@aws-amplify/ui';
+
 
 I18n.putVocabularies(translations);
 I18n.setLanguage('fi');
@@ -103,6 +106,8 @@ function SignOutButton() {
         <Stack.Screen name="Profile" component={Profile} options={{ headerShown: false }} />
         <Stack.Screen name="Play" component={Play} options={{ headerShown: false }} />
         <Stack.Screen name="ConfigurePlay" component={ConfigurePlay} options={{ headerShown: false }} />
+        <Stack.Screen name="OwnCollection" component={OwnCollection} options={{ headerShown: false }} />
+        <Stack.Screen name="PackCreator" component={PackCreator} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
     </Authenticator>

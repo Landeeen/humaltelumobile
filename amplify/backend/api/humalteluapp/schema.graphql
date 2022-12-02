@@ -1,0 +1,30 @@
+type Pack @model
+ @auth(
+    rules: [
+     {  allow: owner }     
+  ]
+ )
+ {
+  id: ID!
+  packName: String!
+  userID: ID! @index(name: "byUser", sortKeyFields: ["id"])
+  tasks: [String!]!
+  private: Boolean!
+}
+
+type User @model
+@auth(
+    rules: [
+     {  allow: owner }     
+  ]
+ ) {
+  id: ID!
+  email: String!
+  packs: [Pack] @hasMany(indexName: "byUser", fields: ["id"])
+  likedPacks: [Pack] @hasMany(indexName: "byUser", fields: ["id"])
+  paidCustomer: Boolean!
+}
+
+
+
+
