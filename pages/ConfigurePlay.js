@@ -19,22 +19,34 @@ const startGame = () => {
     console.warn(playerList);
 }
 
+const removePlayer = (player) => {
+    
+    const newPlayerList = (playerList.filter(e => e !== player))
+    setPlayerList(newPlayerList)
+    // console.warn(playerList);
+}
+
+
 const packs = [
     {
     name: 'Normaali Peli',
-    maker: 'Samu'
+    tasks: 80,
+    creator: 'Samu'
     },
     {
     name: 'Super Peli',
-    maker: 'Samu'
+    tasks: 80,
+    creator: 'Samu'
     },
     {
     name: 'Hauska Peli',
-    maker: 'Samu'
+    tasks: 80,
+    creator: 'Samu'
     },
     {
     name: 'Vain Peli',
-    maker: 'Samu'
+    tasks: 80,
+    creator: 'Samu'
     },
 ]
 
@@ -42,8 +54,7 @@ const packs = [
         <View style={styles.container}>
             <View style={styles.top}>
                 <Pressable style={({ pressed }) => [styles.backButton, pressed ? {opacity: 0.3} : {},]} onPress={() => navigation.goBack()}>
-                    <Ionicons name="caret-back" size={15} color="black"/>
-                    <Text>Takaisin</Text>
+                    <Ionicons name="arrow-back-circle" size={35} color="black"/>
                 </Pressable>
                 <TextInput
                 value={player}
@@ -56,25 +67,36 @@ const packs = [
                 
                 <View style={styles.list}>
                 {playerList.map((player) => {
-                return(<Text style={styles.names}>{player}</Text>)}
+                return(
+                    <View style={styles.names} >
+                        <Text style={styles.namesText}>{player}</Text>
+                        <Pressable style={({ pressed }) => [pressed ? {opacity: 0.3} : {},]} onPress={() => removePlayer(player)}>
+                            <Ionicons name="close" size={20} color="red"/>
+                        </Pressable>
+                    </View>
+                )}
                 )}
                 </View>
                 <Ionicons name="beer-outline" size={200} style={styles.background}/>
             </View>
-            <Pressable style={({ pressed }) => [styles.startButton, pressed ? {opacity: 0.3} : {},]} onPress={() => navigation.navigate('Play', {playerList: playerList})}>
-                <Ionicons name="play-circle" size={40} color="black"/>
-                <Text style={styles.startText}>Aloita Peli</Text>
-            </Pressable>
-            <View style={styles.card}>
+            <View style={styles.bottom}>
+                
+            
+            
                 <FlatList
                 keyExtractor={item => item.name}
                 horizontal
                 showsHorizontalScrollIndicator={false}
                 pagingEnabled={true}
                 data={packs}
-                renderItem={({item}) => <PackItem pack={item}/>}
+                renderItem={({item}) => <PackItem pack={item} playerList={playerList} navigation={navigation}/>}
                 
                 />
+                <View style={styles.instructor}>
+                    <Ionicons name="caret-back" size={20} color="black"/>
+                    <Text  style={styles.instructorText}>Valitse pakka</Text>
+                    <Ionicons name="caret-forward" size={20} color="black"/>
+                </View>
                 
             </View>
         </View>
@@ -86,20 +108,31 @@ const styles = StyleSheet.create({
     container:
         {
         alignItems: 'center',
-        height: '100%'
+        height: '100%',
+        backgroundColor: '#218380',
         },
     top:
         {
         backgroundColor: '#218380',
         width: '100%',
-        height: '75%',
+        height: '60%',
         alignItems: 'center',
-        paddingTop: 75
+        // justifyContent: 'center',
+        paddingTop: 50,
+        
         },
+    backButton:
+        {
+        marginBottom: 20,
+        fontSize: 15,
+        flexDirection: 'row',
+        width: '90%'
+        },
+
     input:
         {
         backgroundColor: 'white',
-        width: '70%',
+        width: '90%',
         height: 50,
         borderColor: '#ffbc42',
         borderRadius: 8,
@@ -108,8 +141,8 @@ const styles = StyleSheet.create({
     background:
         {
         color: '#ffbc42',
-        top: 180,
-        left: 100,
+        top: '50%',
+        left: '27%',
         opacity: 0.3,
         transform: [{ rotate: "20deg" }],
         position: 'absolute',
@@ -124,66 +157,60 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         width: '90%',
         margin: 'auto',
-        marginTop: 40,
+        marginTop: 15,
         },
     names:
         {
         margin: 10,
+        padding: 4,
         fontWeight: 'bold',
         fontSize: 15,
         color: 'black',
-        backgroundColor: 'white',
-        padding: 6,
+        backgroundColor: '#ffbc42',
+        maxWidth: 150,
         borderRadius: 10,
         overflow: 'hidden',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center'
         },
-    startButton:
+    namesText:
         {
-        margin: 5,
-        position: 'absolute',
-        bottom: 325,
-        backgroundColor: '#218380',
-        width: '70%',
-        height: 50,
+        fontWeight: 'bold',
+        fontSize: 15,
+        paddingRight: 5
+        },
+    instructor:
+        {
+        justifyContent: 'space-between',
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center',
+        width: '90%',
+        backgroundColor: '#218380',
+        borderRadius: 10,
+        // borderWidth: 2,
+        height: '10%',
+        marginTop: -20,
+        marginBottom: 20,
+        // opacity: 0.8
         
         },
-    startText:
+    instructorText:
         {
-        fontSize: 25,
-        fontWeight: 'bold',
-        marginLeft: 10
-        },
-    packSelector:
-        {
-        margin: 5,
-        width: '80%',
-        height: 250,
-        backgroundColor: '#ffbc42',
-        borderRadius: 10,
-        position: 'absolute',
-        bottom: 50,
-        alignItems: 'center'
+        fontSize: 18,
+        color: 'black',
+        fontWeight: 'bold'
         },
     title:
         {
         fontSize: 25,
         margin: 30
         },
-    card:
+    bottom:
         {
-            position: 'absolute',
-            bottom: 50,
+        height: '40%',
+        width: '100%',
+        alignItems: 'center'
         },
-    backButton:
-        {
-            position: 'absolute',
-            top: 45,
-            left: 10,
-            fontSize: 15,
-            flexDirection: 'row'
-        },
-
+    
   })

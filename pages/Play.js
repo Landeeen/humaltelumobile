@@ -2,12 +2,12 @@ import * as React from 'react';
 import { View, Text, Button, StyleSheet, Pressable } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { API, graphqlOperation } from 'aws-amplify'
-import { listPacks } from '../src/graphql/queries/'
+import * as queries from '../src/graphql/queries/'
 
 
 export default function Play({navigation, route}) {
 
-  const [tasks, setTasks] = React.useState([])
+const [tasks, setTasks] = React.useState([])
 
 
 React.useEffect( () => {
@@ -16,10 +16,11 @@ const fetchPacks = async () => {
   try{
 
     const packsResult = await API.graphql(
-      graphqlOperation(listPacks)
+      graphqlOperation(queries.getPack, { id: '1' })
+      
     )
-    setTasks(packsResult.data.listPacks.items[0].tasks)
-    // console.log(packsResult.data.listPacks.items[1].tasks);
+    setTasks(packsResult.data.getPack.tasks)
+    console.log(packsResult.data.getPack.tasks);
     
   } catch (e) {
     console.log(e);

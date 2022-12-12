@@ -1,14 +1,43 @@
 import * as React from 'react';
-import { View, Text, Button, StyleSheet, Pressable, TextInput, FlatList } from 'react-native';
+import { View, Text, Button, StyleSheet, Pressable, TextInput, FlatList, Keyboard, Alert } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import TextDrawer from '../components/TextDrawer';
 
-function MyCheckbox() {
+function MyCheckbox({item, selectedTasks, setSelectedTasks, deleteCheck, setDeleteCheck}) {
     const [checked, onChange] = React.useState(false);
-  
+    
+    React.useEffect( () => {
+
+      const checker = () => {
+        if(deleteCheck && checked){
+            onChange(!checked);
+        }
+        // console.log('running');
+        
+      } 
+      checker()
+    }, [deleteCheck])
+
     function onCheckmarkPress() {
-      onChange(!checked);
+        
+        deleteCheck && setDeleteCheck(false)
+        
+        if(!checked){
+            const newSelectedTasks = selectedTasks.concat(item)
+            setSelectedTasks(newSelectedTasks)
+            // console.log(selectedTasks);
+            
+        } else {
+            const newSelectedTasks = selectedTasks.filter(i => i !== item)
+            setSelectedTasks(newSelectedTasks)
+            // console.log(selectedTasks);
+        }
+        onChange(!checked);
+      
     }
   
+
+
     return (
       <Pressable
         style={[styles.checkboxBase, checked && styles.checkboxChecked]}
@@ -23,26 +52,65 @@ function MyCheckbox() {
 export default function PackCreator({navigation}) {
 
 const [task, onChangeTask] = React.useState(null)
+const [packName, onChangePackName] = React.useState('Syötä nimi')
+const [selectedTasks, setSelectedTasks] = React.useState([])
+const [deleteCheck, setDeleteCheck] = React.useState(false)
+
+
+
 
 const [checkedP, onChangeCheckedP] = React.useState(false);
   
-    function onPuPrPress() {
+function onPuPrPress() {
         onChangeCheckedP(!checkedP);
-    }
-
-const addTask = () => {
-        // const newList = [...playerList, player]
-        // player ? setPlayerList(newList) :  console.warn('enter a name')
-        onChangeTask(null)
-        
 }
 
 const [tasks, setTasks] = React.useState(['testi1', 'testi2', 'testi3', 'testi4', 'testi5', 'testi6', 'testi7', 'testi8', 'testi9', 'testi10', 'testi11', 'testi12','testi13', 'testi14', 'testi15', 'testi16', 'testi17',])
 
+const addTask = () => {
+    if(task){
+        const newTaskList = (tasks.concat(task))
+        setTasks(newTaskList)
+        Keyboard.dismiss()
+        onChangeTask(null)
+    }
+    
+}
+
+const alertDelete = () => {
+    Alert.alert(
+        "Warning",
+        "If you delete selected tasks they are lost forever. Continue?",
+        [
+          {
+            text: "Cancel",
+            onPress: () => console.log("Cancel Pressed"),
+            style: "Cancel"
+          },
+          { text: "Yes", onPress: () => deleteTask() }
+        ]
+      );
+}
+
+const deleteTask = () => {
+   
+    const newTaskList = (tasks.filter(e => !selectedTasks.includes(e)))
+    setTasks(newTaskList)
+    setSelectedTasks([])
+    setDeleteCheck(true)
+    // console.log('test');
+}
+
     return (
         <View style={styles.container}>
             <View style={styles.topBar}>
-                <Text style={styles.packName}>Testipakka</Text>
+                <TextInput
+                value={packName}
+                numberOfLines={1}
+                style={styles.packName}
+                onChangeText={onChangePackName}
+                blurOnSubmit={true}
+                />
                 <View style={styles.topBarRight}>
                     <Text style={styles.numberOfTasks}>68/100</Text>
                     <Pressable style={styles.saveButton}>
@@ -71,7 +139,7 @@ const [tasks, setTasks] = React.useState(['testi1', 'testi2', 'testi3', 'testi4'
                 </Pressable>
                 <Pressable style={({ pressed }) => [styles.middleButton, pressed ? {opacity: 0.3} : {},]} onPress={() => navigation.navigate('Home')}>
                     <Ionicons name="home" size={22} color="black"/>
-                    <Text style={styles.middleText}>home</Text>
+                    <Text style={styles.middleText}>koti</Text>
                 </Pressable>
                 <TextInput
                 value={task}
@@ -81,31 +149,35 @@ const [tasks, setTasks] = React.useState(['testi1', 'testi2', 'testi3', 'testi4'
                 onChangeText={onChangeTask}
                 // textAlign={'center'}
                 placeholder="Lisää haaste"
-                blurOnSubmit={true}
+                blurOnSubmit={true} 
                 onSubmitEditing={addTask}
                 />
-                <Pressable style={styles.addButton}>
+                <Pressable style={({ pressed }) => [styles.addButton, pressed ? {opacity: 0.3} : {},]} onPress={() => addTask()}>
                     <Ionicons name="add-circle" size={40} color="#218380"/>
                 </Pressable>
+                {selectedTasks.length > 0 &&<Pressable style={({ pressed }) => [styles.deleteButton, pressed ? {backgroundColor: '#798f81'} : {},]} onPress={() => alertDelete()}>
+                    <Ionicons name="trash" size={20} color="black"/>
+                </Pressable>}
             </View>
             <View style={styles.bottomTab}>
                 <FlatList
                     showsVerticalScrollIndicator={false}
                     data={tasks}
-                    // renderItem={({item}) => <PackItem pack={item}/>}
+                    
                     renderItem={({item, index}) => {
                         return (
                         <View style={styles.task}>
                             <Pressable style={styles.selector}>
-                                <MyCheckbox />
+                                <MyCheckbox item={item} tasks={tasks} selectedTasks={selectedTasks} setSelectedTasks={setSelectedTasks} deleteCheck={deleteCheck} setDeleteCheck={setDeleteCheck}/>
+                                <Text style={styles.taskNum}>{index + 1}.</Text>
                             </Pressable>
-                            <Text style={styles.taskText}>{index + 1}.   {item}</Text>
+                            <TextDrawer item={item}/>
                             <Pressable style={styles.editButton}>
                                 <Ionicons name="pencil" size={20} color="black"/>
                             </Pressable>
                         </View>)
                     }}
-                    keyExtractor={item => item}
+                    keyExtractor={index => index.key}
                 />
             </View>
         </View>
@@ -199,7 +271,6 @@ const [tasks, setTasks] = React.useState(['testi1', 'testi2', 'testi3', 'testi4'
         marginBottom: '5%',
         flexDirection: 'row',
         flexWrap: 'wrap',
-        
         },
     middleButton: 
         {
@@ -244,32 +315,44 @@ const [tasks, setTasks] = React.useState(['testi1', 'testi2', 'testi3', 'testi4'
         justifyContent: 'center'
         
         },
+    deleteButton: 
+        {
+        position: 'absolute',
+        height: 90,
+        width: 90,
+        bottom: '-10%',
+        left: '-10%',
+        backgroundColor: 'white',
+        borderColor: '#218380',
+        borderWidth: 20,
+        borderRadius: 50,
+        alignItems: 'center',
+        justifyContent: 'center',
+        overflow: "hidden",
+        },
     bottomTab: 
         {
         flex: 1,
         flexGrow: 1,
         alignItems: 'center',
         width: '95%',
+        
         },
     task: 
         {
         flexDirection: 'row',
         backgroundColor: '#ffbc42',
         marginTop: 25,
-        height: 55,
+        minHeight: 55,
         borderRadius: 10,
-        },
-    taskText: 
-        {
-        width: '70%',
-        marginTop: '5%'
+        
         },
     selector: 
         {
-        width: '15%',
+        width: '18%',
         alignItems: 'center',
-        justifyContent: 'center',
-        
+        // justifyContent: 'center',
+        flexDirection: 'row'
         },
     editButton: 
         {
@@ -283,6 +366,7 @@ const [tasks, setTasks] = React.useState(['testi1', 'testi2', 'testi3', 'testi4'
         },
     checkboxBase:
         {
+        marginLeft: 10,
         width: 24,
         height: 24,
         justifyContent: 'center',
@@ -291,11 +375,17 @@ const [tasks, setTasks] = React.useState(['testi1', 'testi2', 'testi3', 'testi4'
         borderWidth: 2,
         borderColor: 'black',
         backgroundColor: 'transparent',
-        marginLeft: '-20%'
+        
         },
     checkboxChecked:
         {
         backgroundColor: '#f2431f',
+        },
+    taskNum:
+        {
+        marginLeft: 5,
+        fontSize: 15,
+        fontWeight: 'bold'
         },
    
   })
