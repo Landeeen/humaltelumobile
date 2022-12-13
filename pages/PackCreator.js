@@ -2,8 +2,15 @@ import * as React from 'react';
 import { View, Text, Button, StyleSheet, Pressable, TextInput, FlatList, Keyboard, Alert } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import TextDrawer from '../components/TextDrawer';
+import { useFonts } from 'expo-font';
 
 function MyCheckbox({item, selectedTasks, setSelectedTasks, deleteCheck, setDeleteCheck}) {
+
+    const [fontsLoaded] = useFonts({
+        'Rony': require('../assets/fonts/Simvoni-gxm5Y.ttf'),
+        'RonyBold': require('../assets/fonts/SimvoniBold-L3m7g.ttf'),
+    });
+
     const [checked, onChange] = React.useState(false);
     
     React.useEffect( () => {
@@ -52,9 +59,12 @@ function MyCheckbox({item, selectedTasks, setSelectedTasks, deleteCheck, setDele
 export default function PackCreator({navigation}) {
 
 const [task, onChangeTask] = React.useState(null)
+const [pp, setPp] = React.useState(false)
 const [packName, onChangePackName] = React.useState('Syötä nimi')
 const [selectedTasks, setSelectedTasks] = React.useState([])
 const [deleteCheck, setDeleteCheck] = React.useState(false)
+const [editCheck, setEditCheck] = React.useState(false)
+const [editIndex, setEditIndex] = React.useState(null)
 
 
 
@@ -63,18 +73,35 @@ const [checkedP, onChangeCheckedP] = React.useState(false);
   
 function onPuPrPress() {
         onChangeCheckedP(!checkedP);
+        setPp(!pp)
 }
 
 const [tasks, setTasks] = React.useState(['testi1', 'testi2', 'testi3', 'testi4', 'testi5', 'testi6', 'testi7', 'testi8', 'testi9', 'testi10', 'testi11', 'testi12','testi13', 'testi14', 'testi15', 'testi16', 'testi17',])
 
 const addTask = () => {
-    if(task){
+    if(!editCheck && task){
         const newTaskList = (tasks.concat(task))
         setTasks(newTaskList)
         Keyboard.dismiss()
         onChangeTask(null)
     }
+    if(editCheck){
+        const newTaskList = tasks
+        newTaskList[editIndex] = task
+        console.log(newTaskList);
+        setTasks(newTaskList)
+        Keyboard.dismiss()
+        onChangeTask(null)
+        setEditCheck(false)
+        setEditIndex(null)
+    }
     
+}
+
+const editTask = (edit, index) => {
+    onChangeTask(edit)
+    setEditCheck(true)
+    setEditIndex(index)
 }
 
 const alertDelete = () => {
@@ -101,6 +128,11 @@ const deleteTask = () => {
     // console.log('test');
 }
 
+const saveExit = () => {
+    const newPack = {name: packName, tasks: tasks, private: pp}
+    console.log(newPack);
+}
+
     return (
         <View style={styles.container}>
             <View style={styles.topBar}>
@@ -113,7 +145,7 @@ const deleteTask = () => {
                 />
                 <View style={styles.topBarRight}>
                     <Text style={styles.numberOfTasks}>68/100</Text>
-                    <Pressable style={styles.saveButton}>
+                    <Pressable style={({ pressed }) => [styles.saveButton, pressed ? {opacity: 0.3} : {},]} onPress={() => saveExit()}>
                         <Ionicons name="save-outline" size={40} color="black"/>
                     </Pressable>
                 </View>
@@ -121,11 +153,11 @@ const deleteTask = () => {
             <View style={styles.publicSelector}>
                 <Pressable style={[styles.public, !checkedP && styles.publicSelected]}
                         onPress={onPuPrPress}>
-                    <Text style={styles.publicText}>julkinen</Text>
+                    <Text style={styles.ppText}>julkinen</Text>
                 </Pressable>
                 <Pressable style={[styles.private, checkedP && styles.privateSelected]}
                         onPress={onPuPrPress}>
-                    <Text style={styles.privateText}>yksityinen</Text>
+                    <Text style={styles.ppText}>yksityinen</Text>
                 </Pressable>
             </View>
             <View style={styles.middleBar}>
@@ -150,10 +182,10 @@ const deleteTask = () => {
                 // textAlign={'center'}
                 placeholder="Lisää haaste"
                 blurOnSubmit={true} 
-                onSubmitEditing={addTask}
+                // onSubmitEditing={addTask}
                 />
                 <Pressable style={({ pressed }) => [styles.addButton, pressed ? {opacity: 0.3} : {},]} onPress={() => addTask()}>
-                    <Ionicons name="add-circle" size={40} color="#218380"/>
+                    <Ionicons name={!editCheck ? "add-circle" : "save"} size={40} color="#218380"/>
                 </Pressable>
                 {selectedTasks.length > 0 &&<Pressable style={({ pressed }) => [styles.deleteButton, pressed ? {backgroundColor: '#798f81'} : {},]} onPress={() => alertDelete()}>
                     <Ionicons name="trash" size={20} color="black"/>
@@ -172,8 +204,8 @@ const deleteTask = () => {
                                 <Text style={styles.taskNum}>{index + 1}.</Text>
                             </Pressable>
                             <TextDrawer item={item}/>
-                            <Pressable style={styles.editButton}>
-                                <Ionicons name="pencil" size={20} color="black"/>
+                            <Pressable style={({ pressed }) => [styles.editButton, pressed ? {opacity: 0.3} : {},]} onPress={() => editTask(item, index)}>
+                                <Ionicons name="build" size={20} color="black"/>
                             </Pressable>
                         </View>)
                     }}
@@ -192,7 +224,7 @@ const deleteTask = () => {
         alignItems: 'center',
         backgroundColor: '#218380',
         height: '100%',
-        
+        fontFamily: 'Rony',
         },
     topBar: 
         {
@@ -221,13 +253,15 @@ const deleteTask = () => {
     packName: 
         {
         width: '75%',
-        fontSize: 30,
+        fontSize: 35,
         fontWeight: 'bold',
-        marginLeft: '4%'
+        marginLeft: '4%',
+        fontFamily: 'RonyBold',
         },
     numberOfTasks: 
         {
-        fontSize: 15
+        fontSize: 15,
+        fontFamily: 'Rony',
         },
     publicSelector: 
         {
@@ -263,6 +297,12 @@ const deleteTask = () => {
         {
         backgroundColor: '#e5a93b',
         },
+    ppText: 
+        {
+        fontFamily: 'Rony',
+        paddingTop: 5,
+        fontSize: 18
+        },
     middleBar: 
         {
         height: '30%',
@@ -271,6 +311,7 @@ const deleteTask = () => {
         marginBottom: '5%',
         flexDirection: 'row',
         flexWrap: 'wrap',
+        
         },
     middleButton: 
         {
@@ -287,7 +328,9 @@ const deleteTask = () => {
         {
         fontSize: 15,
         paddingLeft: 5,
-        paddingRight: 5
+        paddingRight: 5,
+        paddingTop: 5,
+        fontFamily: 'Rony',
         },
     input: 
         {
@@ -345,7 +388,6 @@ const deleteTask = () => {
         marginTop: 25,
         minHeight: 55,
         borderRadius: 10,
-        
         },
     selector: 
         {
@@ -385,7 +427,9 @@ const deleteTask = () => {
         {
         marginLeft: 5,
         fontSize: 15,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        fontFamily: 'Rony',
+        paddingTop: 5,
         },
    
   })

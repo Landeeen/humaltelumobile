@@ -1,9 +1,12 @@
 import * as React from 'react';
-import { View, Text, Button, StyleSheet, TextInput, Pressable, FlatList} from 'react-native';
+import { View, Text, Button, StyleSheet, TextInput, Pressable, FlatList, Image} from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import PackItem from '../components/PackItem';
 
+
 export default function ConfigurePlay({navigation}) {
+
+
 
 const [player, onChangePlayer] = React.useState(null)
 const [playerList, setPlayerList] = React.useState([])
@@ -53,9 +56,11 @@ const packs = [
     return (
         <View style={styles.container}>
             <View style={styles.top}>
-                <Pressable style={({ pressed }) => [styles.backButton, pressed ? {opacity: 0.3} : {},]} onPress={() => navigation.goBack()}>
-                    <Ionicons name="arrow-back-circle" size={35} color="black"/>
-                </Pressable>
+                <View style={styles.backButton}>
+                    <Pressable style={({ pressed }) => [pressed ? {opacity: 0.3} : {},]} onPress={() => navigation.goBack()}>
+                        <Ionicons name="arrow-back-circle" size={35} color="black"/>
+                    </Pressable>
+                </View>
                 <TextInput
                 value={player}
                 style={styles.input}
@@ -77,7 +82,10 @@ const packs = [
                 )}
                 )}
                 </View>
-                <Ionicons name="beer-outline" size={200} style={styles.background}/>
+                <Image
+                style={styles.background}
+                source={require('../assets/Hlogo.png')}
+                />
             </View>
             <View style={styles.bottom}>
                 
@@ -94,7 +102,7 @@ const packs = [
                 />
                 <View style={styles.instructor}>
                     <Ionicons name="caret-back" size={20} color="black"/>
-                    <Text  style={styles.instructorText}>Valitse pakka</Text>
+                    <Text  style={styles.instructorText}> </Text>
                     <Ionicons name="caret-forward" size={20} color="black"/>
                 </View>
                 
@@ -136,15 +144,16 @@ const styles = StyleSheet.create({
         height: 50,
         borderColor: '#ffbc42',
         borderRadius: 8,
-        fontSize: 20
+        fontSize: 20,
+        opacity: 0.6
         },
     background:
         {
-        color: '#ffbc42',
-        top: '50%',
-        left: '27%',
+        width: 450,
+        height: 450,
+        top: '10%',
+        left: '15%',
         opacity: 0.3,
-        transform: [{ rotate: "20deg" }],
         position: 'absolute',
         zIndex: -1
         },
@@ -165,8 +174,7 @@ const styles = StyleSheet.create({
         padding: 4,
         fontWeight: 'bold',
         fontSize: 15,
-        color: 'black',
-        backgroundColor: '#ffbc42',
+        backgroundColor: 'white',
         maxWidth: 150,
         borderRadius: 10,
         overflow: 'hidden',
@@ -178,21 +186,22 @@ const styles = StyleSheet.create({
         {
         fontWeight: 'bold',
         fontSize: 15,
-        paddingRight: 5
+        paddingRight: 5,
+        color: '#218380',
         },
     instructor:
         {
         justifyContent: 'space-between',
         flexDirection: 'row',
         alignItems: 'center',
-        width: '90%',
+        width: '75%',
         backgroundColor: '#218380',
         borderRadius: 10,
         // borderWidth: 2,
         height: '10%',
         marginTop: -20,
         marginBottom: 20,
-        // opacity: 0.8
+        opacity: 0.4
         
         },
     instructorText:

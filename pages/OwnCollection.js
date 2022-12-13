@@ -1,8 +1,14 @@
 import * as React from 'react';
 import { View, Text, Button, StyleSheet, Pressable, FlatList } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { useFonts } from 'expo-font';
 
 export default function OwnCollection({navigation}) {
+    
+const [fontsLoaded] = useFonts({
+    'Rony': require('../assets/fonts/Simvoni-gxm5Y.ttf'),
+    'RonyBold': require('../assets/fonts/SimvoniBold-L3m7g.ttf'),
+});
 
 const [playerPacks, setPlayerPacks] = React.useState([{name: 'testi1 om tämä', tasks: 88},{name: 'tosipitkäsana', tasks: 88},{name: 'testi3', tasks: 88},{name: 'testi4', tasks: 88},{name: 'testi5', tasks: 88}])
 const [likedPacks, setLikedPacks] = React.useState([])
@@ -24,7 +30,11 @@ const [likedPacks, setLikedPacks] = React.useState([])
                 </Pressable>
             </View>
             <View style={styles.packList}>
-                <Text style={styles.listTitle}>Omat pakat</Text>
+               
+                <View style={styles.listTitleBox}>
+                    <Text style={styles.listTitle}>Omat pakat</Text>
+                    <Text style={styles.listTitle}>5/10</Text>
+                </View>
                 <FlatList
                     keyExtractor={item => item.index}
                     horizontal
@@ -45,7 +55,13 @@ const [likedPacks, setLikedPacks] = React.useState([])
                 />
             </View>
             <View style={styles.packList}>
-                <Text style={[styles.listTitle, styles.listTitle2]}>Tykätyt pakat</Text>
+                <View style={styles.listTitleBox}>
+                    <Text style={styles.listTitle}>Tykätyt pakat</Text>
+                    <View style={styles.likedBox}>
+                        <Ionicons name="heart" size={20} color="black"/>
+                        <Text style={styles.listTitle}>21</Text>
+                    </View>
+                </View>
                 <FlatList
                     keyExtractor={item => item.index}
                     horizontal
@@ -58,6 +74,7 @@ const [likedPacks, setLikedPacks] = React.useState([])
                         
                             <Pressable style={({ pressed }) => [styles.card, styles.card2, pressed ? {opacity: 0.3} : {},]} onPress={() => navigation.navigate('PackCreator')}>
                                 <Text style={styles.packTitle}>{item.name}</Text>
+                                <Text style={styles.taskNumber}>tekijä: Samu</Text>
                                 <Text style={styles.taskNumber}>{item.tasks}/100</Text>
                             </Pressable>
                         )
@@ -114,7 +131,8 @@ const [likedPacks, setLikedPacks] = React.useState([])
         fontSize: 20,
         fontWeight: 'bold',
         // marginLeft: 10,
-        
+        fontFamily: 'RonyBold',
+        paddingTop: 5,
         color: '#218380',
         },
     packList: 
@@ -125,23 +143,30 @@ const [likedPacks, setLikedPacks] = React.useState([])
         backgroundColor: '#218380',
     
         },
+    listTitleBox: 
+        {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '75%',
+        marginLeft: '5%',
+        backgroundColor: '#1c706e',
+        marginBottom: 20,
+        padding: 5,
+        borderRadius: 10,
+        },
     listTitle: 
         {
-        
-        width: '50%',
-        marginLeft: '5%',
-        // backgroundColor: 'white',
+        fontFamily: 'Rony',
         fontSize: 20,
         fontWeight: 'bold',
-        marginBottom: 20,
-        // padding: 3,
-        // borderRadius: 10,
-        // overflow: 'hidden',
-        // textAlign: 'center'
+        overflow: 'hidden',
         },
-    listTitle2: 
+    likedBox: 
         {
-        // backgroundColor: '#d9557c',
+        width: '20%',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between'
         },
     card: 
         {
@@ -167,11 +192,21 @@ const [likedPacks, setLikedPacks] = React.useState([])
         fontSize: 25,
         fontWeight: 'bold',
         padding: 10,
+        fontFamily: 'RonyBold',
+        padding: 5,
+        margin: 5,
+        backgroundColor: '#e5a93b',
+        borderRadius: 10,
+        overflow: 'hidden',
+        opacity: 0.8,
+        height: '60%'
         },
     taskNumber: 
         {
         fontSize: 15,
         padding: 10,
+        fontFamily: 'Rony',
+        paddingTop: 5,
         },
   })
   

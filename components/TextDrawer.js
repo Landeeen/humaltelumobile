@@ -1,7 +1,14 @@
 import * as React from 'react';
 import { View, Text, StyleSheet, Pressable  } from 'react-native';
+import { useFonts } from 'expo-font';
 
 export default function TextDrawer({item}) {
+
+const [fontsLoaded] = useFonts({
+    'Rony': require('../assets/fonts/Simvoni-gxm5Y.ttf'),
+    'RonyBold': require('../assets/fonts/SimvoniBold-L3m7g.ttf'),
+});
+
 
 const [open, setOpen] = React.useState(false)
 const [numOfLines, setNumOfLines] = React.useState(1);
@@ -10,7 +17,7 @@ const [noWrap, setNoWrap] = React.useState(55);
 const wrapper = () => {
     noWrap ===  55 ? setNoWrap(1000) : setNoWrap(55)
     numOfLines ===  1 ? setNumOfLines(50) : setNumOfLines(1)
-    console.log(item);
+    // console.log(item);
 }
 
 
@@ -32,12 +39,13 @@ toggle:
     {
     width: '67%',
     justifyContent: 'center',
-    alignItems: 'center',
+    // alignItems: 'center',
     },
 textToggle:
     {
-    margin: 5
-     
+    margin: 22,
+    fontFamily: 'Rony',
+    paddingTop: 5,
     },
 
 

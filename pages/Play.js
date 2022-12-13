@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Text, Button, StyleSheet, Pressable } from 'react-native';
+import { View, Text, Button, StyleSheet, Pressable, Image } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { API, graphqlOperation } from 'aws-amplify'
 import * as queries from '../src/graphql/queries/'
@@ -50,27 +50,37 @@ const nextTask = () => {
     return (
         <View style={styles.container}>
           <View style={styles.top}>
-            <Pressable style={({ pressed }) => [styles.menu, pressed ? {opacity: 0.3} : {},]} onPress={() => navigation.navigate('Home')}>
-              <Ionicons name="menu" size={25} color="black"/>
-            </Pressable>
-           
-              <Pressable style={({ pressed }) => [styles.category, pressed ? {opacity: 0.3} : {},]} onPress={() => nextTask()}>
-                <Text>Seuraava tehtävä</Text>
-              </Pressable>
-            
-          </View>
-          <View style={styles.card}>
+              <View style={styles.menu}>
+                  <Pressable style={({ pressed }) => [pressed ? {opacity: 0.3} : {},]} onPress={() => navigation.goBack()}>
+                      <Ionicons name="md-pause-circle" size={35} color="black"/>
+                  </Pressable>
+                  <Image
+                  style={styles.logo}
+                  source={require('../assets/Hlogo.png')}
+                  />
+              </View>
+            <View style={styles.card}>
             <Text style={styles.task}>{task}</Text>
             {task === undefined && tasks.length < 1 ?
             <View>
-              <Text style={styles.task}>PELI PÄÄTTYI</Text>
-              <Pressable style={({ pressed }) => [styles.menu, pressed ? {opacity: 0.3} : {},]} onPress={() => navigation.navigate('Home')}>
-                <Ionicons name="home-outline" size={25} color="black"/>
+              <Text style={styles.endText}>PELI PÄÄTTYI</Text>
+              <Pressable style={({ pressed }) => [styles.backHome, pressed ? {opacity: 0.3} : {},]} onPress={() => navigation.navigate('Home')}>
                 <Text >Takaisin kotivalikkoon</Text>
+                <Ionicons name="home-outline" size={25} color="black"/>
               </Pressable>
             </View>
               : null}
           </View>
+          </View>
+          <View style={styles.bottom}>
+          
+           
+              <Pressable style={({ pressed }) => [styles.nextButton, pressed ? {backgroundColor: '#798f81'} : {},]} onPress={() => nextTask()}>
+                <Ionicons name="beer-outline" size={75} style={styles.nextIcon}/>
+              </Pressable>
+            
+          </View>
+         
           
         </View>
     );
@@ -80,7 +90,8 @@ const styles = StyleSheet.create({
   container:
     {
     alignItems: 'center',
-    height: '100%'
+    height: '100%',
+    backgroundColor: '#218380'
     },
   top:
     {
@@ -88,34 +99,35 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '75%',
     alignItems: 'center',
-    justifyContent: 'center',
-    paddingTop: 75,
-    flexDirection: 'row',
-    flexWrap: 'wrap'
+    paddingTop: 50,
+    
     },
-  category:
+  menu:
     {
-    backgroundColor: 'white',
-    width: '40%',
-    height: '10%',
-    alignItems: 'center',
-    borderRadius: 10,
-    margin: 15,
-    justifyContent: 'center',
+    width: '90%',
+    marginBottom: 20,
+    flexDirection: 'row',
     },
+  logo:
+    {
+    position: 'absolute',
+    width: 50,
+    height: 50,
+    opacity: 0.8,
+    right: 1,
+    },
+  
   card:
     {
     margin: 5,
     width: '90%',
-    height: '50%',
+    height: '100%',
     backgroundColor: '#ffbc42',
     borderRadius: 10,
-    position: 'absolute',
-    bottom: 50,
     alignItems: 'center',
     justifyContent: 'center',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.5,
     shadowRadius: 2,
     elevation: 2,
@@ -124,11 +136,54 @@ const styles = StyleSheet.create({
     {
     fontSize: 30
     },
-  menu:
+  endText:
     {
-      position: 'absolute',
-      top: 45,
-      left: 20
-
+    fontWeight: 'bold',
+    fontSize: 30,
+    
+    },
+  backHome:
+    {
+    fontWeight: 'bold',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 60
+    
+    },
+  bottom:
+    {
+    height: '25%',
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center'
+    },
+  nextButton:
+    {
+    backgroundColor: 'white',
+    width: 175,
+    height: 175,
+    alignItems: 'center',
+    borderRadius: 100,
+    justifyContent: 'center',
+    marginTop: -20,
+    borderWidth: 20,
+    borderColor: '#218380',
+    overflow: "hidden",
+    
+    },
+  nextButtonText:
+    {
+    fontWeight: 'bold',
+    fontSize: 25,
+    color: '#218380',
+    textAlign: 'center'
+    },
+  nextIcon:
+    {
+    fontWeight: 'bold',
+    fontSize: 75,
+    color: '#218380',
+    transform: [{ rotate: "20deg" }],
+    marginLeft: 5
     },
   })
