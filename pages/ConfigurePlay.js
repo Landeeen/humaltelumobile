@@ -3,10 +3,7 @@ import { View, Text, Button, StyleSheet, TextInput, Pressable, FlatList, Image} 
 import Ionicons from '@expo/vector-icons/Ionicons';
 import PackItem from '../components/PackItem';
 
-
 export default function ConfigurePlay({navigation}) {
-
-
 
 const [player, onChangePlayer] = React.useState(null)
 const [playerList, setPlayerList] = React.useState([])
@@ -60,6 +57,15 @@ const packs = [
                     <Pressable style={({ pressed }) => [pressed ? {opacity: 0.3} : {},]} onPress={() => navigation.goBack()}>
                         <Ionicons name="arrow-back-circle" size={35} color="black"/>
                     </Pressable>
+                    {/* <TextInput
+                value={player}
+                style={styles.topText}
+                onChangeText={onChangePlayer}
+                textAlign={'center'}
+                placeholder="Lisää pelaaja +"
+                placeholderTextColor={'#218380'}
+                onSubmitEditing={addPlayer}
+                /> */}
                 </View>
                 <TextInput
                 value={player}
@@ -82,10 +88,10 @@ const packs = [
                 )}
                 )}
                 </View>
-                <Image
+                {/* <Image
                 style={styles.background}
                 source={require('../assets/Hlogo.png')}
-                />
+                /> */}
             </View>
             <View style={styles.bottom}>
                 
@@ -102,11 +108,12 @@ const packs = [
                 />
                 <View style={styles.instructor}>
                     <Ionicons name="caret-back" size={20} color="black"/>
-                    <Text  style={styles.instructorText}> </Text>
+                    <Text style={styles.instructorText}> </Text>
                     <Ionicons name="caret-forward" size={20} color="black"/>
                 </View>
                 
             </View>
+            
         </View>
 
     );
@@ -121,7 +128,7 @@ const styles = StyleSheet.create({
         },
     top:
         {
-        backgroundColor: '#218380',
+        // backgroundColor: '#218380',
         width: '100%',
         height: '60%',
         alignItems: 'center',
@@ -134,7 +141,22 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         fontSize: 15,
         flexDirection: 'row',
-        width: '90%'
+        width: '90%',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+        },
+    topText:
+        {
+        fontFamily: 'RonyBold',
+        fontSize: 25,
+        padding: 10,
+        width: '85%',
+        backgroundColor: 'black',
+        borderRadius: 10,
+        overflow: 'hidden',
+        color: '#218380',
+        textAlign: 'center',
+
         },
 
     input:
@@ -147,16 +169,16 @@ const styles = StyleSheet.create({
         fontSize: 20,
         opacity: 0.6
         },
-    background:
-        {
-        width: 450,
-        height: 450,
-        top: '10%',
-        left: '15%',
-        opacity: 0.3,
-        position: 'absolute',
-        zIndex: -1
-        },
+    // background:
+    //     {
+    //     width: 450,
+    //     height: 450,
+    //     top: '10%',
+    //     left: '15%',
+    //     opacity: 0.3,
+    //     position: 'absolute',
+    //     zIndex: -1
+    //     },
     list:
         {
         display: 'flex',
@@ -194,15 +216,12 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         flexDirection: 'row',
         alignItems: 'center',
-        width: '75%',
-        backgroundColor: '#218380',
-        borderRadius: 10,
-        // borderWidth: 2,
+        width: '100%',
+        position: 'absolute',
+        bottom: '20%',
         height: '10%',
-        marginTop: -20,
-        marginBottom: 20,
-        opacity: 0.4
-        
+        opacity: 0.2,
+        zIndex: -1
         },
     instructorText:
         {

@@ -1,16 +1,10 @@
 import * as React from 'react';
 import { View, Text, Button, StyleSheet, Dimensions, Pressable  } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { useFonts } from 'expo-font';
 
 const { width } = Dimensions.get('window');
 
 export default function PackItem({pack, playerList, navigation}) {
-
-    const [fontsLoaded] = useFonts({
-        'Rony': require('../assets/fonts/Simvoni-gxm5Y.ttf'),
-        'RonyBold': require('../assets/fonts/SimvoniBold-L3m7g.ttf'),
-    });
 
     return (
     <View style={styles.container}>
@@ -44,7 +38,7 @@ card:
     {
     
     paddingBottom: 20,
-    width: '90%',
+    width: '85%',
     height: '90%',
     backgroundColor: '#ffbc42',
     borderRadius: 10,

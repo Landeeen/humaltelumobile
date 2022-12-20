@@ -1,18 +1,9 @@
 import * as React from 'react';
 import { View, Text, Button, StyleSheet, Pressable, Image } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { useFonts } from 'expo-font';
-
-
-
+import Background from '../components/Background';
 
 export default function Home({navigation}) {
-
-    const [fontsLoaded] = useFonts({
-        'Rony': require('../assets/fonts/Simvoni-gxm5Y.ttf'),
-        'RonyBold': require('../assets/fonts/SimvoniBold-L3m7g.ttf'),
-    });
-
 
     return (
         
@@ -24,7 +15,7 @@ export default function Home({navigation}) {
             <Pressable style={({ pressed }) => [styles.card, styles.small,  pressed ? {opacity: 0.6} : {},]} onPress={() => navigation.navigate('Profile')}>
                 <Ionicons name="person" size={65} color="#218380"/>
             </Pressable>
-            <Pressable style={({ pressed }) => [styles.card, styles.small,  pressed ? {opacity: 0.6} : {},]} onPress={() => navigation.navigate('Profile')}>
+            <Pressable style={({ pressed }) => [styles.card, styles.small,  pressed ? {opacity: 0.6} : {},]} onPress={() => navigation.navigate('Browse')}>
                 <Ionicons name="search" size={65} color="#218380"/>
             </Pressable>
             <Pressable style={({ pressed }) => [styles.card,  pressed ? {opacity: 0.6} : {},]} onPress={() => navigation.navigate('OwnCollection')}>
@@ -32,20 +23,7 @@ export default function Home({navigation}) {
             </Pressable>
             
             </View>
-            <View style={styles.background}>
-                <Image
-                style={[styles.logo, styles.logo1]}
-                source={require('../assets/Hlogo.png')}
-                />
-                <Image
-                style={[styles.logo, styles.logo2]}
-                source={require('../assets/Hlogo.png')}
-                />
-                <Image
-                style={[styles.logo, styles.logo3]}
-                source={require('../assets/Hlogo.png')}
-                />
-            </View>
+            <Background/>
          </View>
        
     );
@@ -100,37 +78,6 @@ export default function Home({navigation}) {
         fontWeight: 'bold',
         fontFamily: 'Rony',
         textAlign: 'center'
-        },
-    background: 
-        {
-        position: 'absolute',
-        width: '100%',
-        height: '100%',
-        zIndex: -1,
-        justifyContent: 'space-around',
-        
-        },
-    logo: 
-        {
-        width: 225,
-        height: 225,
-        opacity: 0.3
-
-        },
-    logo1: 
-        {
-        marginLeft: '40%',
-        marginTop: '5%'
-        },
-    logo2: 
-        {
-        marginLeft: '-5%',
-        
-        },
-    logo3: 
-        {
-        marginLeft: '20%',
-        marginTop: '5%'
         },
     rotate: 
         {

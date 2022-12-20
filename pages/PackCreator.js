@@ -2,14 +2,8 @@ import * as React from 'react';
 import { View, Text, Button, StyleSheet, Pressable, TextInput, FlatList, Keyboard, Alert } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import TextDrawer from '../components/TextDrawer';
-import { useFonts } from 'expo-font';
 
 function MyCheckbox({item, selectedTasks, setSelectedTasks, deleteCheck, setDeleteCheck}) {
-
-    const [fontsLoaded] = useFonts({
-        'Rony': require('../assets/fonts/Simvoni-gxm5Y.ttf'),
-        'RonyBold': require('../assets/fonts/SimvoniBold-L3m7g.ttf'),
-    });
 
     const [checked, onChange] = React.useState(false);
     

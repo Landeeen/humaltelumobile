@@ -10,14 +10,16 @@ import Play from './pages/Play';
 import ConfigurePlay from './pages/ConfigurePlay';
 import OwnCollection from './pages/OwnCollection';
 import PackCreator from './pages/PackCreator';
+import Browse from './pages/Browse'
 
 import { Amplify } from 'aws-amplify'
 import awsconfig from './src/aws-exports'
-import { Authenticator, ThemeProvider } from '@aws-amplify/ui-react-native';
+import { Authenticator, ThemeProvider, useAuthenticator } from '@aws-amplify/ui-react-native';
 
 import { I18n } from 'aws-amplify';
 import { translations } from '@aws-amplify/ui';
 
+import { useFonts } from 'expo-font';
 
 I18n.putVocabularies(translations);
 I18n.setLanguage('fi');
@@ -61,7 +63,15 @@ function SignOutButton() {
   return <Button title="Sign Out" onPress={signOut} />;
 }
 
- const App = () => {
+const App = () => {
+
+const [fontsLoaded] = useFonts({
+    'Rony': require('./assets/fonts/Simvoni-gxm5Y.ttf'),
+    'RonyBold': require('./assets/fonts/SimvoniBold-L3m7g.ttf'),
+});
+
+
+
   return (
     <ThemeProvider theme={{
       
@@ -108,6 +118,7 @@ function SignOutButton() {
         <Stack.Screen name="ConfigurePlay" component={ConfigurePlay} options={{ headerShown: false }} />
         <Stack.Screen name="OwnCollection" component={OwnCollection} options={{ headerShown: false }} />
         <Stack.Screen name="PackCreator" component={PackCreator} options={{ headerShown: false }} />
+        <Stack.Screen name="Browse" component={Browse} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
     </Authenticator>

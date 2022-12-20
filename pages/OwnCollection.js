@@ -1,17 +1,20 @@
 import * as React from 'react';
 import { View, Text, Button, StyleSheet, Pressable, FlatList } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { useFonts } from 'expo-font';
+import PackScreen from '../components/PackScreen';
 
 export default function OwnCollection({navigation}) {
     
-const [fontsLoaded] = useFonts({
-    'Rony': require('../assets/fonts/Simvoni-gxm5Y.ttf'),
-    'RonyBold': require('../assets/fonts/SimvoniBold-L3m7g.ttf'),
-});
 
-const [playerPacks, setPlayerPacks] = React.useState([{name: 'testi1 om tämä', tasks: 88},{name: 'tosipitkäsana', tasks: 88},{name: 'testi3', tasks: 88},{name: 'testi4', tasks: 88},{name: 'testi5', tasks: 88}])
+const [playerPacks, setPlayerPacks] = React.useState([{name: 'testi1 om tämä hfhfhfhfhfhfhfhfhfhf jfjfhfhfj jfjfjfjfjfj', tasks: 88},{name: 'tosipitkäsana', tasks: 88},{name: 'testi3', tasks: 88},{name: 'testi4', tasks: 88},{name: 'testi5', tasks: 88}])
 const [likedPacks, setLikedPacks] = React.useState([])
+const [selectedTask, setSelectedTask] = React.useState(null)
+const [packScreen, setPackScreen] = React.useState(false)
+
+const openPack = (item) => {
+    setSelectedTask(item)
+    setPackScreen(!packScreen)
+}
 
 
     return (
@@ -24,7 +27,7 @@ const [likedPacks, setLikedPacks] = React.useState([])
                     <Text style={styles.topTitle}>Luo uusi</Text>
                     <Ionicons name="add" size={25} color="#218380"/>
                 </Pressable>
-                <Pressable style={({ pressed }) => [styles.topCard, pressed ? {opacity: 0.3} : {},]} onPress={() => navigation.navigate('PackCreator')}>
+                <Pressable style={({ pressed }) => [styles.topCard, pressed ? {opacity: 0.3} : {},]} onPress={() => navigation.navigate('Browse')}>
                     <Text style={styles.topTitle}>Selaa pakkoja</Text>
                     <Ionicons name="globe-outline" size={25} color="#218380"/>
                 </Pressable>
@@ -58,7 +61,7 @@ const [likedPacks, setLikedPacks] = React.useState([])
                 <View style={styles.listTitleBox}>
                     <Text style={styles.listTitle}>Tykätyt pakat</Text>
                     <View style={styles.likedBox}>
-                        <Ionicons name="heart" size={20} color="black"/>
+                        <Ionicons name="heart" size={20} color="#218380"/>
                         <Text style={styles.listTitle}>21</Text>
                     </View>
                 </View>
@@ -72,7 +75,7 @@ const [likedPacks, setLikedPacks] = React.useState([])
                     renderItem={({item, index}) => {
                         return (
                         
-                            <Pressable style={({ pressed }) => [styles.card, styles.card2, pressed ? {opacity: 0.3} : {},]} onPress={() => navigation.navigate('PackCreator')}>
+                            <Pressable style={({ pressed }) => [styles.card, styles.card2, pressed ? {opacity: 0.3} : {},]} onPress={() => openPack(item)}>
                                 <Text style={styles.packTitle}>{item.name}</Text>
                                 <Text style={styles.taskNumber}>tekijä: Samu</Text>
                                 <Text style={styles.taskNumber}>{item.tasks}/100</Text>
@@ -82,7 +85,7 @@ const [likedPacks, setLikedPacks] = React.useState([])
                     
                 />
             </View>
-            
+            {packScreen && <PackScreen setPackScreen={setPackScreen} selectedTask={selectedTask} setSelectedTask={setSelectedTask}/>}
         </View>
     );
   }
@@ -140,7 +143,7 @@ const [likedPacks, setLikedPacks] = React.useState([])
         height: '35%',
         width: '100%',
         
-        backgroundColor: '#218380',
+        // backgroundColor: '#218380',
     
         },
     listTitleBox: 
@@ -150,16 +153,18 @@ const [likedPacks, setLikedPacks] = React.useState([])
         width: '75%',
         marginLeft: '5%',
         backgroundColor: '#1c706e',
+        backgroundColor: 'black',
         marginBottom: 20,
         padding: 5,
         borderRadius: 10,
         },
     listTitle: 
         {
-        fontFamily: 'Rony',
+        fontFamily: 'RonyBold',
         fontSize: 20,
         fontWeight: 'bold',
         overflow: 'hidden',
+        color: '#218380'
         },
     likedBox: 
         {

@@ -1,14 +1,7 @@
 import * as React from 'react';
 import { View, Text, StyleSheet, Pressable  } from 'react-native';
-import { useFonts } from 'expo-font';
 
 export default function TextDrawer({item}) {
-
-const [fontsLoaded] = useFonts({
-    'Rony': require('../assets/fonts/Simvoni-gxm5Y.ttf'),
-    'RonyBold': require('../assets/fonts/SimvoniBold-L3m7g.ttf'),
-});
-
 
 const [open, setOpen] = React.useState(false)
 const [numOfLines, setNumOfLines] = React.useState(1);
